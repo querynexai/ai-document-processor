@@ -1,0 +1,122 @@
+<div class="page">
+  @if (invoice(); as inv) {
+    <div class="header">
+      <a routerLink="/invoices" class="back">← Back to invoices</a>
+      <div class="header-main">
+        <h1>{{ inv.filename }}</h1>
+        @if (inv.confidenceScore !== null) {
+          <span class="confidence" [class.low]="inv.confidenceScore < 0.75">
+            {{ (inv.confidenceScore * 100).toFixed(0) }}% confidence
+          </span>
+        }
+      </div>
+      <p class="meta">
+        Type: {{ inv.documentType ?? '—' }} ·
+        Status: <strong>{{ inv.status }}</strong> ·
+        Uploaded: {{ inv.uploadedAt | date:'medium' }}
+      </p>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h2>Extracted Fields</h2>
+
+        <div class="field">
+          <label>Vendor Name</label>
+          <input type="text" [(ngModel)]="form.vendorName" />
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Invoice Number</label>
+            <input type="text" [(ngModel)]="form.invoiceNumber" />
+          </div>
+          <div class="field">
+            <label>Currency</label>
+            <input type="text" [(ngModel)]="form.currency" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Invoice Date</label>
+            <input type="date" [(ngModel)]="form.invoiceDate" />
+          </div>
+          <div class="field">
+            <label>Due Date</label>
+            <input type="date" [(ngModel)]="form.dueDate" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Subtotal</label>
+            <input type="number" [(ngModel)]="form.subtotal" step="0.01" />
+          </div>
+          <div class="field">
+            <label>Tax</label>
+            <input type="number" [(ngModel)]="form.taxAmount" step="0.01" />
+          </div>
+          <div class="field">
+            <label>Total</label>
+            <input type="number" [(ngModel)]="form.totalAmount" step="0.01" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Notes</label>
+          <textarea rows="3" [(ngModel)]="form.notes" placeholder="Add review notes…"></textarea>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" (click)="save()" [disabled]="saving()">
+            @if (saving()) { Saving… } @else if (saved()) { ✅ Approved } @else { Approve & Save }
+          </button>
+          <button class="btn btn-ghost" (click)="toggleRawText()">
+            {{ showRawText() ? 'Hide' : 'Show' }} Raw Text
+          </button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Line Items ({{ inv.lineItems.length }})</h2>
+
+        @if (inv.lineItems.length > 0) {
+          <table class="items-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Description</th>
+                <th>Qty</th>
+                <th>Unit</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of inv.lineItems; track item.lineItemId) {
+                <tr>
+                  <td>{{ item.lineNumber }}</td>
+                  <td>{{ item.description ?? '—' }}</td>
+                  <td>{{ item.quantity ?? '—' }}</td>
+                  <td>{{ formatCurrency(item.unitPrice, inv.currency ?? 'INR') }}</td>
+                  <td>{{ formatCurrency(item.totalPrice, inv.currency ?? 'INR') }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        } @else {
+          <p class="empty">No line items detected.</p>
+        }
+      </div>
+    </div>
+
+    @if (showRawText() && inv.rawText) {
+      <div class="panel raw-panel">
+        <h2>Raw OCR Text</h2>
+        <pre>{{ inv.rawText }}</pre>
+      </div>
+    }
+  } @else {
+    <p class="empty">Loading…</p>
+  }
+</div>

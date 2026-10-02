@@ -1,0 +1,81 @@
+<div class="page">
+  <header class="page-header">
+    <h1>📄 Invoices</h1>
+    <a routerLink="/upload" class="btn btn-primary">+ Upload Document</a>
+  </header>
+
+  @if (stats(); as s) {
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Total Processed</span>
+        <span class="stat-value">{{ s.totalInvoices }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Pending Review</span>
+        <span class="stat-value warn">{{ s.pendingReview }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Approved</span>
+        <span class="stat-value ok">{{ s.approved }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Avg Confidence</span>
+        <span class="stat-value">{{ (s.averageConfidence * 100).toFixed(1) }}%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Total Value</span>
+        <span class="stat-value">{{ formatCurrency(s.totalValue) }}</span>
+      </div>
+    </div>
+  }
+
+  @if (loading()) {
+    <p class="empty">Loading…</p>
+  } @else if (invoices().length === 0) {
+    <div class="empty-state">
+      <p>No invoices yet.</p>
+      <a routerLink="/upload" class="btn btn-primary">Upload your first invoice</a>
+    </div>
+  } @else {
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>Vendor</th>
+            <th>Invoice #</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Confidence</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (inv of invoices(); track inv.invoiceId) {
+            <tr>
+              <td>{{ inv.filename }}</td>
+              <td>{{ inv.vendorName ?? '—' }}</td>
+              <td>{{ inv.invoiceNumber ?? '—' }}</td>
+              <td>{{ inv.invoiceDate ? (inv.invoiceDate | date:'shortDate') : '—' }}</td>
+              <td>{{ formatCurrency(inv.totalAmount) }}</td>
+              <td>
+                @if (inv.confidenceScore !== null) {
+                  <span class="badge" [class]="confidenceClass(inv.confidenceScore)">
+                    {{ (inv.confidenceScore * 100).toFixed(0) }}%
+                  </span>
+                } @else { — }
+              </td>
+              <td>
+                <span class="status" [class]="statusClass(inv.status)">{{ inv.status }}</span>
+              </td>
+              <td>
+                <a [routerLink]="['/invoices', inv.invoiceId]" class="link">View →</a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

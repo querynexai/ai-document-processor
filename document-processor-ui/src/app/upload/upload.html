@@ -1,0 +1,32 @@
+<div class="page">
+  <header class="page-header">
+    <h1>📤 Upload Document</h1>
+    <p>Upload an invoice or receipt (PDF or image). The AI will extract structured data automatically.</p>
+  </header>
+
+  <div
+    class="drop-zone"
+    [class.dragging]="dragOver()"
+    [class.loading]="uploading()"
+    (drop)="onDrop($event)"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave()"
+  >
+    @if (uploading()) {
+      <div class="spinner"></div>
+      <p class="prompt">Processing document… this can take 5-10 seconds</p>
+    } @else {
+      <div class="icon">📄</div>
+      <p class="prompt">Drop your file here, or</p>
+      <label class="btn btn-primary">
+        Choose file
+        <input type="file" accept=".pdf,image/*" (change)="onFileSelected($event)" hidden />
+      </label>
+      <p class="hint">PDF, PNG, JPG · up to 20 MB</p>
+    }
+  </div>
+
+  @if (message()) {
+    <div class="message" [class.error]="isError()">{{ message() }}</div>
+  }
+</div>

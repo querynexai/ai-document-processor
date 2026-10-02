@@ -1,0 +1,65 @@
+:host { display: block; padding: 32px 24px; max-width: 1400px; margin: 0 auto; }
+
+.page-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px;
+}
+.page-header h1 { color: #fff; margin: 0; font-size: 26px; }
+
+.btn {
+  padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600;
+  text-decoration: none; cursor: pointer; transition: all 0.2s; font-size: 14px;
+}
+.btn-primary { background: #00b4d8; color: #fff; }
+.btn-primary:hover { background: #0096c7; }
+
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px; margin-bottom: 28px;
+}
+.stat-card {
+  background: #1a1a2e; border: 1px solid #2a2a40; border-radius: 12px; padding: 18px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.stat-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+.stat-value { font-size: 24px; font-weight: 700; color: #fff; }
+.stat-value.warn { color: #fbbf24; }
+.stat-value.ok { color: #4ade80; }
+
+.table-wrap {
+  background: #1a1a2e; border: 1px solid #2a2a40; border-radius: 12px; overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+thead { background: #161b22; }
+th {
+  text-align: left; padding: 12px 16px; color: #00b4d8; font-weight: 600;
+  font-size: 12px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #2a2a40;
+}
+td { padding: 12px 16px; color: #ccc; border-bottom: 1px solid rgba(42, 42, 64, 0.5); }
+tbody tr:hover { background: rgba(0, 180, 216, 0.04); }
+tbody tr:last-child td { border-bottom: none; }
+
+.badge {
+  padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;
+}
+.badge.high { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+.badge.medium { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+.badge.low { background: rgba(248, 81, 73, 0.15); color: #f87171; }
+
+.status {
+  padding: 3px 10px; border-radius: 10px; font-size: 12px; text-transform: capitalize;
+  background: rgba(136, 136, 136, 0.15); color: #ccc;
+}
+.status.approved { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+.status.needs-review { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+.status.pending { background: rgba(136, 136, 136, 0.15); color: #aaa; }
+.status.rejected { background: rgba(248, 81, 73, 0.15); color: #f87171; }
+
+.link { color: #00b4d8; text-decoration: none; font-weight: 500; }
+.link:hover { text-decoration: underline; }
+
+.empty-state {
+  text-align: center; padding: 60px 20px; background: #1a1a2e;
+  border: 1px dashed #2a2a40; border-radius: 12px;
+}
+.empty-state p { color: #888; margin-bottom: 20px; }
+.empty { text-align: center; padding: 40px; color: #888; }
